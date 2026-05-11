@@ -1,5 +1,5 @@
-from Service import Service
-from Relogio import Relogio
+from app.Service import Service
+from app.Relogio import Relogio
 
 class Controller:
     @staticmethod

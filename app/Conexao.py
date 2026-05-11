@@ -2,7 +2,7 @@ from datetime import date, timedelta
 from dateutil.relativedelta import relativedelta
 from pathlib import Path
 import re
-from BancoDeDadosJson import BancoDeDadosJson
+from app.BancoDeDadosJson import BancoDeDadosJson
 
 
 class Conexao(BancoDeDadosJson):

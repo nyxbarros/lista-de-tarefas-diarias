@@ -3,7 +3,7 @@ from datetime import datetime, date, timedelta
 
 from textual import filter
 
-from Conexao import Conexao
+from app.Conexao import Conexao
 
 from datetime import datetime, date, timedelta
 from dateutil.relativedelta import relativedelta

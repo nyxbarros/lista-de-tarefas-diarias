@@ -1,6 +1,6 @@
 import subprocess
 from pathlib import Path
-from Conexao import Conexao
+from app.Conexao import Conexao
 import os
 import re
 

@@ -1,4 +1,4 @@
-from Controller import Controller
+from app.Controller import Controller
 
 def main():
     while True:
