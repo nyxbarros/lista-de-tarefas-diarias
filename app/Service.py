@@ -72,5 +72,5 @@ class Service:
                     "nome": nome,
                     "data": data
                 })
-
         Conexao.salvar(dados)
+        Conexao.ordenar()

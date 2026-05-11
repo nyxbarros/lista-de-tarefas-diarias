@@ -45,7 +45,8 @@ class Conexao(BancoDeDadosJson):
             if not 'a cada ' in k:
                 saida += f'{k}:\n'
                 for tarefa in v['tarefas']:
-                    saida += f'- [{"X" if tarefa["feito"] else " "}] {tarefa["nome"]}\n'
+                    data = tarefa['data']
+                    saida += f'- [{"X" if tarefa["feito"] else " "}]{"" if data is None else f" ({data})"} {tarefa["nome"]}\n'
                 saida += '\n'
 
         return saida
@@ -61,7 +62,7 @@ class Conexao(BancoDeDadosJson):
                 return 2
             if re.fullmatch(r"a cada \d+ ano", chave):
                 return 3
-            if re.fullmatch(r"sem prazo", chave):
+            if re.fullmatch(r"outros", chave):
                 return 1000
             return 999
 
