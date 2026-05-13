@@ -67,10 +67,11 @@ class Service:
                 if not nome:
                     continue
 
-                dados[chave_atual]["tarefas"].append({
-                    "feito": feito,
-                    "nome": nome,
-                    "data": data
-                })
+                if not feito or 'a cada ' in chave_atual:
+                    dados[chave_atual]["tarefas"].append({
+                        "feito": feito,
+                        "nome": nome,
+                        "data": data
+                    })
         Conexao.salvar(dados)
         Conexao.ordenar()

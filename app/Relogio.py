@@ -1,9 +1,8 @@
+import builtins
 from builtins import filter
-from datetime import datetime, date, timedelta
-
-from textual import filter
 
 from app.Conexao import Conexao
+from datetime import datetime, date, timedelta
 
 from datetime import datetime, date, timedelta
 from dateutil.relativedelta import relativedelta
@@ -53,10 +52,6 @@ class Relogio:
 
             # listas normais
             else:
-                v["tarefas"] = [
-                    tarefa
-                    for tarefa in v["tarefas"]
-                    if not tarefa["feito"]
-                ]
+                v["tarefas"] = list(filter(lambda x: not x['feito'], v["tarefas"]))
 
         Conexao.salvar(dados)
