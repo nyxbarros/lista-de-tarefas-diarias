@@ -1,7 +1,10 @@
 dados.json
 dados.md
 notas.md
-teste.py
+*teste*
+
 
 .venv
 __pycache__
+*/__pycache__
+**/__pycache__

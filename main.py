@@ -1,8 +1,8 @@
 from app.Controller import Controller
-from app.Relogio import Relogio
+from app.Service import Service
 
 def main():
-    Relogio().resetar()
+    Service().resetar()
     Controller.main()
 
 if __name__ == '__main__':

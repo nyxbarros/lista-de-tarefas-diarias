@@ -1,37 +1,40 @@
 import subprocess
 from pathlib import Path
-from app.Conexao import Conexao
 import os
 import re
+from builtins import filter
+
+from app.Conexao import Conexao
+from datetime import datetime, date, timedelta
+from dateutil.relativedelta import relativedelta
 
 class Service:
     @staticmethod
     def entrada_dados():
         arquivo = Path(__file__).resolve().parent.parent / "dados.md"
 
-        # se não existir, cria com conteúdo inicial
-        try:
-            with open(arquivo, "w", encoding="utf-8") as f:
-                f.write(Conexao.string())
-        except FileExistsError:
-            pass
+        if arquivo.is_file():
+            Service.md_para_json(arquivo)
 
-        # abre o editor do GNOME
+        with open(arquivo, "w", encoding="utf-8") as f:
+            f.write(Conexao.string())
+
         subprocess.run(["gnome-text-editor", arquivo])  # ou "gedit"
 
-        # lê depois de fechar
+        Service.md_para_json(arquivo)
+
+        os.remove(arquivo)
+
+
+    @staticmethod
+    def md_para_json(arquivo):
         with open(arquivo, "r", encoding="utf-8") as f:
             texto = f.read()
 
-        Service.md_para_json(texto)
-        os.remove(arquivo)
-
-    @staticmethod
-    def md_para_json(md):
         dados = {}
         chave_atual = None
 
-        for linha in md.splitlines():
+        for linha in texto.splitlines():
             linha = linha.strip()
 
             if not linha:
@@ -75,3 +78,50 @@ class Service:
                     })
         Conexao.salvar(dados)
         Conexao.ordenar()
+
+    @staticmethod
+    def resetar():
+        dados = Conexao.ler()
+        hoje = date.today()
+
+        for k, v in dados.items():
+
+            # listas recorrentes
+            if k.startswith('a cada '):
+
+                data_obj = datetime.strptime(
+                    v["limite"],
+                    "%Y-%m-%d"
+                ).date()
+
+                numero, unidade = k.split(' ')[2:4]
+                numero = int(numero)
+
+                # reseta tarefas
+                if hoje > data_obj:
+                    for tarefa in v["tarefas"]:
+                        tarefa["feito"] = False
+
+                # avança datas vencidas
+                while hoje > data_obj:
+
+                    if unidade == 'dia':
+                        data_obj += timedelta(days=numero)
+
+                    elif unidade == 'semana':
+                        data_obj += timedelta(weeks=numero)
+
+                    elif unidade == 'mes':
+                        data_obj += relativedelta(months=numero)
+
+                    elif unidade == 'ano':
+                        data_obj += relativedelta(years=numero)
+
+                # salva nova data
+                v["limite"] = data_obj.isoformat()
+
+            # listas normais
+            else:
+                v["tarefas"] = list(filter(lambda x: not x['feito'], v["tarefas"]))
+
+        Conexao.salvar(dados)
