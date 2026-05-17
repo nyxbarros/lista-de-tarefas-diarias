@@ -120,6 +120,18 @@ class Service:
                 # salva nova data
                 v["limite"] = data_obj.isoformat()
 
+            elif k in ['domingo', 'segunda-feira', 'terça-feira', 'quarta-feira', 'quinta-feira', 'sexta-feira', 'sábado']:
+                data_obj = datetime.strptime(v["limite"],"%Y-%m-%d").date()
+
+                if hoje > data_obj:
+                    for tarefa in v["tarefas"]:
+                        tarefa["feito"] = False
+
+                while hoje > data_obj:
+                    data_obj += timedelta(weeks=1)
+
+                v["limite"] = data_obj.isoformat()
+
             # listas normais
             else:
                 v["tarefas"] = list(filter(lambda x: not x['feito'], v["tarefas"]))
